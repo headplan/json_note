@@ -8,5 +8,5 @@
 * [对比](对比.md)
 * [应用](应用.md)
     * [在PHP中使用](在php中使用.md)
-    * 在Python中使用
+    * [在Python中使用](在python中使用.md)
 
