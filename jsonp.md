@@ -153,11 +153,15 @@ document.getElementsByTagName('head')[0].appendChild(script);
 </script>
 ```
 
-先定义了一个回调方法showInfo , 然后将其当作url参数的一部分发送到服务端 , 这里的发送就是创建&lt;script&gt;标签 , 通过其src属性发送 , 服务端通过字符串拼接的方式将数据包裹在回调方法中 , 就是php返回的数据是showInfo\({数据}\) , 再返回回来 , 也就等于调用了showInfo这个回调方法 . 
+先定义了一个回调方法showInfo , 然后将其当作url参数的一部分发送到服务端 , 这里的发送就是创建&lt;script&gt;标签 , 通过其src属性发送 , 服务端通过字符串拼接的方式将数据包裹在回调方法中 , 就是php返回的数据是showInfo\({数据}\) , 再返回回来 , 也就等于调用了showInfo这个回调方法 .
 
 > 浏览器跨域解决方案 : 这里给出的总结很好 .
 >
 > [https://github.com/rccoder/blog/issues/5](https://github.com/rccoder/blog/issues/5)
+>
+> 这里有一篇博客以及博主其他文章收藏
+>
+> http://justcoding.iteye.com/blog/1366102/
 
 
 
