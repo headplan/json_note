@@ -155,9 +155,17 @@ document.getElementsByTagName('head')[0].appendChild(script);
 
 先定义了一个回调方法showInfo , 然后将其当作url参数的一部分发送到服务端 , 这里的发送就是创建&lt;script&gt;标签 , 通过其src属性发送 , 服务端通过字符串拼接的方式将数据包裹在回调方法中 , 就是php返回的数据是showInfo\({数据}\) , 再返回回来 , 也就等于调用了showInfo这个回调方法 .
 
-下面是简单的封装 : 
+下面是简单的封装 :
 
 ```js
+<script type="text/javascript">
+var showInfo2 = function(data){  
+  console.log(data);
+  $('body').append(data['code']);  
+}
+var url = "http://localhost:8881/?callback=showInfo2";
+loadScript(url, showInfo2);
+
 function loadScript(myUrl, callback)
 {
   var head = document.getElementsByTagName('head')[0];  
@@ -165,19 +173,20 @@ function loadScript(myUrl, callback)
   script.type = 'text/javascript';  
   script.src = myUrl;
 
-  script.onload = script.onreadystatechange = function() {  
+  script.onload = script.onreadystatechange = function() {
     if((!this.readyState || this.readyState === "loaded" || this.readyState === "complete")){  
       callback && callback();  
       // Handle memory leak in IE  
       script.onload = script.onreadystatechange = null;//人工回收内存  
       if ( head && script.parentNode ) {  
-        head.removeChild( script );  
+        head.removeChild(script);  
       }  
     }  
   };
 
   head.insertBefore( script, head.firstChild );  
 }
+</script>
 ```
 
 > 浏览器跨域解决方案 : 这里给出的总结很好 .
