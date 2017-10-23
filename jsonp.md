@@ -19,7 +19,7 @@ index.php
         "name" : "headplan",
         "code" : 200,  
     }';  
-  
+
     echo $info;  
 ?>
 php -S localhost:8881 index.php
@@ -28,13 +28,13 @@ test.html
 <!DOCTYPE html>
 <html>
 <head>
-	<title>test</title>
+    <title>test</title>
 </head>
 <body>
 
 <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-	$.ajax({  
+    $.ajax({  
           type: "post",  
           url: "http://localhost:8881",  
           dataType: "json",  
@@ -55,7 +55,7 @@ php -S localhost:8882 test.html
 
 > No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
-所以JSONP是为了解决这个问题的 . 
+所以JSONP是为了解决这个问题的 .
 
 > 修改服务端代码 , 为index.php加上header\(Access-Control-Allow\_Origin:\*\);允许所有来源的请求访问该资源 , 也可以简单实现 .
 
@@ -99,13 +99,13 @@ echo $callback."(".$info.")";
 <!DOCTYPE html>
 <html>
 <head>
-	<title>test</title>
+    <title>test</title>
 </head>
 <body>
 
 <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-	$.ajax({  
+    $.ajax({  
           type: "post",  
           url: "http://localhost:8881",  
           dataType: "json",  
@@ -128,19 +128,20 @@ echo $callback."(".$info.")";
               console.log("fail");  
           }  
   });
-  
+
   $.getJSON("http://localhost:8881/?callback=?",function(data){  
           console.log(data);  
   });  
 </script>
 </body>
 </html>
+```
+
+这里使用了jQuery封装好的方法 . 下面用原声js再模拟一下 : 
 
 ```
 
-
-
-
+```
 
 > 浏览器跨域解决方案 : 这里给出的总结很好 .
 >
