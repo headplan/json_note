@@ -12,24 +12,52 @@ Jsonp\(JSON with Padding\)是 json 的一种"使用模式" , 可以让网页从�
 
 ```
 # 新建两个文件,创建两个域
-php -S localhost:8881 8881.php
-php -S localhost:8882 8882.php
+index.php
+<?php   
+    $info = '{  
+        "title" : "jsonp",  
+        "name" : "headplan",
+        "code" : 200,  
+    }';  
+  
+    echo $info;  
+?>
+php -S localhost:8881 index.php
+===== 
+test.html
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
 
-# 8882.php中用jquery发起请求
-<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script>
-$.get("http://localhost:8881/", function (data) {
-        console.log(data)
-        $('body').html(data);
-});
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$.ajax({  
+          type: "post",  
+          url: "http://localhost:8881",  
+          dataType: "json",  
+          success: function(data) {  
+              console.log(data);  
+          },  
+          error: function(data) {  
+              console.log("fail");  
+          }  
+    });  
 </script>
+</body>
+</html>
+php -S localhost:8882 test.html
 ```
 
-根据同源策略查看log , 很明显会悲剧了 . 浏览器会阻止 , 根本不会发起这个请求 :
+访问localhost:8882 根据同源策略查看log , 很明显会悲剧了 . 浏览器会阻止 , 根本不会发起这个请求 :
 
 > No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
-所以JSONP是为了解决这个问题的 .
+所以JSONP是为了解决这个问题的 . 
+
+> 修改服务端代码 , 为index.php加上header\(Access-Control-Allow\_Origin:\*\);允许所有来源的请求访问该资源 , 也可以简单实现 .
 
 #### Script标签的跨域能力
 
@@ -50,11 +78,73 @@ $.get("http://localhost:8881/", function (data) {
 
 总结一句话就是利用script标签绕过同源策略 , 获得一个类似这样的数据 , jsonp callback是页面存在的回调方法 , 参数就是想得到的json .
 
-#### 利用script获取不同源的json
+#### JSONP的方式
 
-> 浏览器跨域解决方案 : 这里给出的总结很好 . 
+```php
+# 修改index.php
+<?php
+// header('Access-Control-Allow-Origin:*');
+
+$callback = $_GET['callback'];
+
+$info = '{
+    "title" : "jsonp",
+    "name" : "headplan",
+    "code" : 200
+}';
+
+echo $callback."(".$info.")";
+
+# 修改test.html
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$.ajax({  
+          type: "post",  
+          url: "http://localhost:8881",  
+          dataType: "json",  
+          success: function(data) {  
+              console.log(data);  
+          },  
+          error: function(data) {  
+              console.log("fail");  
+          }  
+  });
+  $.ajax({  
+          type: "post",  
+          url: "http://localhost:8881",  
+          dataType: "jsonp",
+          jsonp: "callback",  
+          success: function(data) {  
+              console.log(data);  
+          },  
+          error: function(data) {  
+              console.log("fail");  
+          }  
+  });
+  
+  $.getJSON("http://localhost:8881/?callback=?",function(data){  
+          console.log(data);  
+  });  
+</script>
+</body>
+</html>
+
+```
+
+
+
+
+
+> 浏览器跨域解决方案 : 这里给出的总结很好 .
 >
-> https://github.com/rccoder/blog/issues/5
+> [https://github.com/rccoder/blog/issues/5](https://github.com/rccoder/blog/issues/5)
 
 
 
