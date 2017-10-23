@@ -137,10 +137,20 @@ echo $callback."(".$info.")";
 </html>
 ```
 
-这里使用了jQuery封装好的方法 . 下面用原声js再模拟一下 : 
+这里使用了jQuery封装好的方法 . 下面用原声js再模拟一下 :
 
-```
+```js
+<script type="text/javascript">
+var showInfo = function(data){  
+  console.log(data);
+  $('body').append(data['name']);  
+}
 
+var url = "http://localhost:8881/?callback=showInfo";  
+var script = document.createElement('script');
+script.setAttribute('src', url);
+document.getElementsByTagName('head')[0].appendChild(script);
+</script>
 ```
 
 > 浏览器跨域解决方案 : 这里给出的总结很好 .
